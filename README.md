@@ -1,6 +1,9 @@
 # JavaScriptPerfectGuide
+유데미의 `자바스크립트 완벽 가이드` 강의에서 작성한 소스코드와 배운 내용을 정리한 레포지토리 <br/>
+해당 강의 정리 내용은 README 파일과 벨로그에 정리해놓았습니다. <br/>
+벨로그 바로 가기 : https://velog.io/@heeyoon1302/series/%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%99%84%EB%B2%BD-%EA%B0%80%EC%9D%B4%EB%93%9C
 
-## js의 데이터 타입
+# js의 데이터 타입
 - numbers
 - String
 - Booleans
@@ -12,14 +15,14 @@
   - 배열은 모든 종류의 데이터의 목록이다.
 객체란 키-값 쌍으로 구조화된 그룹화된 데이터이다.
 
-## null, undefined, NaN
+# null, undefined, NaN
 - null - 비었음을 의미하는 "값" -> 데이터 타입은 객체이다.
 - Undefined - 변수가 초기화 되지 않음을 나타냄(데이터 타입)
 - NaN - 숫자가 아니다를 의미하는 값 -> 데이터 타입은 number이다
 - typeof -> 리터럴의 타입을 알려줌
 
 
-## 스크립트 import 방식
+# 스크립트 import 방식
 우리는 스크립트를 HTML에서 body태그 안쪽 하단에 script태그로 임포트를 한다. 그러나 이렇게 하면 최적의 상태는 아니다.
 
 크롬의 개발자 독 - 퍼포먼스 탭 =>  페이지를 로드할 때 브라우저의 동작을 자세히 알 수 있음, 스크립트가 어떻게 로드-분석-실행 되는지 알 수 있음
