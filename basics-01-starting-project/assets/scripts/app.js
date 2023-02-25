@@ -6,6 +6,31 @@ function getUserInputNumber(){
     return parseInt(userInput.value);
 }
 
+function getResult(InputOperator){
+    const enteredValue = getUserInputNumber();
+    if(!enteredValue){
+        return;
+    }
+    const initialValue = currentAnswer;
+    var operator;
+    if(InputOperator === 'ADD'){
+        operator = '+';
+        currentAnswer += enteredValue;
+    }else if(InputOperator === 'SUB'){
+        operator = '-';
+        currentAnswer -= enteredValue;
+    }else if(InputOperator === 'MUL'){
+        operator = '*';
+        currentAnswer *= enteredValue;
+    }else{
+        operator = '/';
+        currentAnswer /= enteredValue;
+    }
+    outputResult(currentAnswer, outputResultDescription(initialValue, operator, getUserInputNumber()))
+    writeToLog(initialValue, enteredValue, inputNumber, currentAnswer);
+
+}
+
 function writeToLog(prevValue, inputValue,operator, result ){
     const entry = {
         prevValue : prevValue,
@@ -22,32 +47,16 @@ function outputResultDescription(currentAnswer, operator, inputNumber){
 }
 
 function add (){
-    const enteredValue = getUserInputNumber();
-    const initialValue = currentAnswer;
-    currentAnswer += enteredValue;
-    outputResult(currentAnswer, outputResultDescription(initialValue, '+', getUserInputNumber()))
-    writeToLog(initialValue, enteredValue, 'ADD', currentAnswer);
+    getResult('ADD');
 }
 function subtract (){
-    const enteredValue = getUserInputNumber();
-    const initialValue = currentAnswer;
-    currentAnswer = currentAnswer - getUserInputNumber();
-    outputResult(currentAnswer, outputResultDescription(initialValue, '-', getUserInputNumber()))
-    writeToLog(initialValue,enteredValue, 'SUB', currentAnswer);
+    getResult('SUB');
 }
 function multiply (){
-    const enteredValue = getUserInputNumber();
-    const initialValue = currentAnswer;
-    currentAnswer = currentAnswer * getUserInputNumber();
-    outputResult(currentAnswer, outputResultDescription(initialValue, '*', getUserInputNumber()))
-    writeToLog(initialValue,enteredValue, 'MUL', currentAnswer);
+    getResult('MUL');
 }
 function divide (){
-    const enteredValue = getUserInputNumber();
-    const initialValue = currentAnswer;
-    currentAnswer = currentAnswer / getUserInputNumber();
-    outputResult(currentAnswer, outputResultDescription(initialValue, '/', getUserInputNumber()))
-    writeToLog(initialValue,enteredValue, 'DIV', currentAnswer);
+    getResult('DIV');
 }
 addBtn.addEventListener('click',add)
 subtractBtn.addEventListener('click',subtract)
