@@ -1,6 +1,8 @@
 # JavaScriptPerfectGuide
 
-# 색션 2 - 기초
+유데미의 `자바스크립트 완벽 가이드` 강의에서 작성한 소스코드와 배운 내용을 정리한 레포지토리 <br/>
+해당 강의 정리 내용은 README 파일과 벨로그에 정리해놓았습니다. <br/>
+벨로그 바로 가기 : https://velog.io/@heeyoon1302/series/%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%99%84%EB%B2%BD-%EA%B0%80%EC%9D%B4%EB%93%9C
 
 ## js의 데이터 타입
 
