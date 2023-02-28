@@ -550,3 +550,260 @@ user = { name: "MIN" };
 처음 user에 이름이 KIM인 객체를 저장했지만, 이후 이름이 MIN인 객체로 재할당했다. 따라서 더 이상 이름이 KIM인 객체를 참조하는 변수가 없는 것이다. 가비지 컬렉터는 해당 객체를 가비지로 판단하고 메모리(힙)에서 삭제한다.
 
 가비지 컬렉터의 의도는 더 이상 사용되지 않는 객체를 메모리에서 없애 메모리 누수를 최소화 하는 것이다. 그러나 위에서 서술한 가비지의 선정 기준으로 인해, 더 이상 사용되지 않는 개체라 할지라도 여전히 참조하는 곳이 있다면, 가비지로 인식되지 못하고 메모리 누수 또한 발생한다. 따라서 이러한 가비지 컬렉션의 특징을 염두해 두고 자바스크립트 코드를 작성하는 것이 좋다.
+
+# 함수 정복하기
+
+자바스크립트에서 함수는 코드를 줄이기 위한 효과적인 수단이다.
+
+# 매개변수와 인자
+
+매개변수는 함수 내에서 정의하는 인자를 받아오는 변수이며, 인자는 함수를 호출 할 때 전달하는 데이터이다.
+
+# 함수 vs 메서드
+
+함수는 독립적으로 정의하는 것이 처음 자바스크립트를 배울 때 국룰이지만, 함수를 객체 내에서도 정의할 수 있다.
+
+```javascript
+const person = {
+  greet: function hello() {
+    console.log("hola world");
+  },
+};
+
+person.greet(); //호출은 다음과 같이 한다.
+
+HTML에서_가져온_객체.addEventListener("click", 함수);
+//이제 위 문장이 무슨 말인지 이해 했는가? HTML에서 가져온 객체 안에
+//이벤트리스터 메서드가 존재하는 것이다.
+```
+
+위 와 같이 객체 내의 프로퍼티에서 정의되는 함수를 `메서드` 라고 부른다.
+
+객체의 프로퍼티로서 함수를 정의할 수 있지만, 함수 그 자체가 객체가 될 순 없을까? 당연히 `가능` 하다.
+
+# 사실 함수는 객체이다
+
+뭔 개소라냐고? 반증 사례가 있다고?
+
+```javascript
+function greet() {
+  console.log("hello");
+}
+
+console.log(typeof greet);
+```
+
+위의 코드를 실행하면 function이라고 뜨는게 반증 사례라고?
+
+![](https://velog.velcdn.com/images/heeyoon1302/post/af36e320-91bf-40bf-a80b-6eaba695a2dd/image.png)
+
+맞다. 함수는 함수다. 그러나 함수는 객체를 통해 만들어졌다. 그니까 함수는 객체의 특별한 종류인 것이다. 증거가 뭐냐고?
+
+```javascript
+function greet() {
+  console.log("hello");
+}
+
+console.dir(greet);
+//"dir메소드는 객체의 속성들을 보여준다"
+```
+
+![](https://velog.velcdn.com/images/heeyoon1302/post/41c9e9ea-39a4-409e-b2c3-1e6b83409cb7/image.png)
+
+위와 같이 함수는 다양한 프로퍼티로 구성되어있다. 따라서 함수는 객체가 가지는 특성 - 예를 들어 자바스크립트 엔진에서 힙에 저장되는 것 - 을 물려 받는다.
+
+다시 본론으로 돌아와서, 함수는 객체이기 때문에 함수를 객체처럼 변수에 저장하는 것이 가능하다.
+
+# 함수를 변수에 저장하다. 그리고 익명함수
+
+```javascript
+const english = function greet() {
+  console.log("hello");
+};
+
+console.log(greet);
+```
+
+greet()으로 정의한 함수를 english라는 상수에 저장했다. 과연 어떤 결과가 나올까?
+![](https://velog.velcdn.com/images/heeyoon1302/post/89cb24ae-1905-49ac-99db-fcb46206d2c4/image.png)
+
+에러가 뜬다. greet() 함수는 english 상수 안에 존재하기 때문에, 함수 실행을 위해선 english를 호출해야 한다.
+
+따라서 변수 안에 존재하는 함수의 이름은 사실상 무의미하다. 그래서 이름을 지우곤 한다. 이때 이름 없는 함수를 `익명 함수` 라고 부른다.
+
+```javascript
+const english = function () {
+  console.log("hello");
+};
+```
+
+# 표현식 vs 선언식
+
+위와 같은 함수 `표현식` 은 함수 `선언식` 과는 어떤 차이가 있을까? 그것을 살펴보기 앞서, 표현식은 간단하게 설명하면 '=' 오른쪽에 들어가는 개념을 말하는 것이다.
+
+함수 선언식은 이미 알다시피 호이스팅 개념이 적용되어, 함수 선언과 호출의 순서가 중요하지 않는다. 함수를 호출하는 코드가 함수를 선언하는 코드보다 개발 환경 상에서 위에 있어도 된다는 말이다.
+
+선언식 또한 호이스팅이 되지만 초기화 되지 않는다. 따라서 코드의 순서가 중요해지는데, 함수를 호출하는 코드가 반드시 함수를 선언하는 코드 이후에 등장해야 하는 점이다. 그리고 이러한 특징이 오히려 개발자들로 하여금 오류와 실수를 줄여주는 수단이 되기에, 함수 선언식보다 함수 표현식을 즐겨 사용하기도 한다.
+
+# 익명 함수의 또 다른 쓰임처
+
+앞서 익명함수에 대해 알아보았고, 또 함수를 표현식으로 정의할 수 있음을 알았다. 함수는 또 다른 곳에서 또한 정의할 수 있는데, 바로 `인자`이다. 이벤트 리스너를 통해 어떤 말인지 알아보자.
+
+```javascript
+const startGameBtn = document.getElementById("start-game-btn");
+
+startGameBtn.addEventListener(
+  "click",
+  (function () {
+    console.log("hi");
+  })()
+);
+//함수를 정의하고 중괄호 바로 뒤에 () 을 넣어 선언부와 호출부를 결합한다.
+```
+
+위와 같이 동일한 함수가 다시 필요하지 않고, 오직 이벤트 리스너에만 사용된다면 다음과 같이 따로 정의하지 않고 익명함수를 이용해 표현할 수 있다.
+
+하지만 이런 형태의 익명함수의 이용에는 문제점이 있다. 만약 이 익명함수에서 문제가 발생할 경우, 일반적인 이름을 가진 함수와는 다르게 오류가 발생할 시 브라우저에서 문제를 일으킨 함수의 이름을 알려주지 못하기 때문이다.
+
+![](https://velog.velcdn.com/images/heeyoon1302/post/64fab268-cd67-4bb6-8658-e1df0dbaa13d/image.png)
+정의되지 않은 변수 add를 위에서 작성한 익명함수의 console.log에 넣었을 때 위와 같은 오류 메시지가 출력된다. 어떤 함수에서 오류가 난지 알 수 없기 때문에 디버깅 시 애를 먹을 수 잇다. 물론 어떤 줄에서 오류가 난지는 알 수 있으나 만약 코드가 길어질 경우 문제가 된다.
+
+따라서 이와 같은 문제를 해결하기 위해 함수를 인자로 전달하는 경우에는 익명함수 보다는 함수의 이름을 정의하는 것이 좋다.
+
+```javascript
+const startGameBtn = document.getElementById("start-game-btn");
+
+startGameBtn.addEventListener(
+  "click",
+  (function greet() {
+    console.log("hi");
+  })()
+);
+```
+
+# 화살표 함수
+
+익명함수는 화살표 함수로 바꿀 수 있다. 그래서 화살표 함수는 뭔데?
+
+```javascript
+const userSelection = () => {
+  let userInput = prompt(`${ROCK}, ${SCISSORS}, ${PAPER}!`, "").toUpperCase();
+  if (userInput != ROCK && userInput != SCISSORS && userInput != PAPER) {
+    console.log(`you enter invalid value, so i will set you ${ROCK}`);
+    userInput = ROCK;
+  }
+  return userInput;
+};
+```
+
+()을 기준으로 앞에 `function` 키워드는 사라지고, 뒤에 `=>`가 생겼다.
+
+그래서 이게 뭐하는건데 0. 일단 function 키워드를 사용하지 않는다.
+
+1. 하나의 매개변수를 받는 경우 더 짧게 작성 가능
+   const funName = (a) => { 를
+   const funName = a => { 로...
+2. 표현식이 하나면 {를 생략 가능
+
+```javascript
+const funName = (a, b) => a + b;
+
+const funName = (inputName) => ({ name: inputName });
+// 객체를 감싸는 소괄호는 객체 생성과 함수 본문을 구분짓는 역할을 한다.
+```
+
+> 결국 화살표 함수가 성능이 더 뛰어나는 것은 아니지만 더 짧은 구문을 가능하게 한다.
+
+# 유동적인 인자 전달
+
+## 매개변수 초기화
+
+만일 함수의 매개변수를 2개로 설정했는데, 실제로 전달하는 인자값은 1개라면 어떻게 될까? 일반적인 프로그래밍 언어라면 오류가 나겠지만, 우리 관대한 자바스크립트 형님은 자체적으로 undefined를 매개변수에 할당한다.
+
+만일 이 전략이 싫다면, 매개변수 기본값을 초기화 해줄 수 있다.
+
+```javascript
+const greed = (name, age = 20) => {
+  console.log(`my name is ${name} and age is ${age}`);
+};
+
+greed("KIM");
+```
+
+다음과 같이 인자를 전달할 경우 name에는 KIM이 할당되고, age에 대해서는 전달되는 인자가 없으므로 기본값인 20이 할당된다.
+
+## 유동적인 개수의 인자 받기
+
+여러 데이터를 함수에 전달하고자 할 때, 만약 데이터의 개수가 유동적이라면 어떻게 처리해야 할까?
+
+먼저 `스프레드 연산자`를 사용하면 된다 `...`을 매개변수 앞에 붙이면 된다.
+
+```javascript
+const sumAll = (...numbers) => {
+  let sum = 0;
+  for (const num in numbers) {
+    sum += num;
+  }
+  return sum;
+};
+
+console.log(sumAll(1, 34, 43, 1, 35, 42, -13));
+console.log(sumAll(2, 3, 1));
+```
+
+이렇게 함수의 매개변수에서 스프레드 연산자를 사용하면 그 매개변수를 `rest` 매개변수라고 부른다. rest로 전달된 값들은 배열의 형태가 된다. 따라서 위와 같은 for - in 문이 사용 가능한 것이다.
+
+물론 다른 매개변수와 rest 매개변수를 사용할 수 있다. 주의할 점은 다른 매개변수가 rest 매개변수 뒤에 있으면 안된다. 왜냐하면 rest 매개변수는 이름답게 남은 모든 인자를 잡아먹기 때문이다.
+
+```javascript
+const sumAll = (name, age, ...numbers) => {
+  let sum = 0;
+  for (const num in numbers) {
+    sum += num;
+  }
+  console.log(name + "" + age);
+  return sum;
+};
+```
+
+# 콜백 함수
+
+함수의 인자로 함수를 전달할 수 있으며, 다른 함수의 매개변수로 전달되는 함수를 `콜백 함수`라고 부른다. addEventListner() 같은 경우에도 함수를 매개변수로 받기 때문에 우리는 이미 콜백 함수를 이용하고 있던 것이다.
+
+```javascript
+const getResult = (showResult, userChoice, computerChoice) => {
+  let result;
+  if (userChoice === computerChoice) {
+    result = RESULT_DRAW;
+  } else if (
+    (userChoice === ROCK && computerChoice === SCISSORS) ||
+    (userChoice === SCISSORS && computerChoice === PAPER) ||
+    (userChoice === PAPER && computerChoice === ROCK)
+  ) {
+    result = RESULT_USER_WIN;
+  } else {
+    result = RESULT_COMPUTER_WIN;
+  }
+  showResult(result);
+};
+
+const showResult = (result) => {
+  console.log(`the reslt is ${result}`);
+};
+
+getResult(showResult, userChoice, computerChoice);
+```
+
+getResult 호출 시 showResult라는 함수를 매개변수로 전달하고 있다. 즉 showResult가 여기서 콜백 함수가 되는 것이다. getResult는 자신이 맡은 임무를 수행하고 도출된 결과물을 showResult 함수에 인자로 전달하여 실행한다. 따라서 콜백 함수의 특징은 바로 실행되는 것이 아닌 특정 사건 이후에 실행되는 것이다.
+
+## bind()로 콜백 함수 유용하게 사용
+
+우리 모두가 아는 콜백함수 addEventListner의 경우 함수를 매개변수로 전달할 때 인자는 전달하지 못한는 점을 알고 있을 거다. 그러나 bind()를 사용하면 이런 문제점을 해결할 수 있다. bind()는 함수를 새로 만들어주는 역할을 한다.
+
+```javascript
+const greed = name => {
+  console.log(`hi~ ${name}`);
+}
+
+HTML객체.addEvnetListner('click', greed.bind(this, "KIM");
+```
