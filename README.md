@@ -807,3 +807,436 @@ const greed = name => {
 
 HTML객체.addEvnetListner('click', greed.bind(this, "KIM");
 ```
+
+텍스트브라우저는 HTML 파일을 분석하여, 다른 여러 언어(자바스크립트에 제한되어있지 않음)를 통해 HTML 요소에 접근할 수 있도록 Document Object Model을 만든다. 이것을 줄임말이 DOM이다. 따라서 자바스크립트에서 DOM에 접근하여 HTML 요소를 이용하는 것이다.
+
+자바스크립트에서 DOM을 이용할 때 크게 두 가지 전역객체를 이용한다.
+
+- document 객체
+- window 객체
+
+# Window 객체
+
+window객체를 통해 브라우저 API에 접근할 수 있다. 대표적인 예로 alert()이다. 우리가 평소 alert()을 사용할 때 앞에 window를 붙이지 않아도 되는 이유는 브라우저가 알아서 window객체를 찾아주기 때문이다.
+console.dir(window)을 통해 window객체를 살펴보면 document도 존재하는 것을 알 수 있다. 따라서 document객체도 결국 window객체 안에 존재한다.
+
+윈도우 객체를 통해 스크립트가 실행하는 브라우저의 창에 대해서 접근 가능하다. 따라서 윈도우 객체를 통해 스크립트가 실행중이지 않은 다른 탭의 웹 페이지와는 상호작용이 불가능하다.
+
+HTML문서의 각각의 태그는 브라우저에 의해 각각 element node(요소 노드)로 저장된다. HTML 태그가 위계적으로 작성되어있기 때문에, 노드트리가 만들어지며, 노트 트리의 최상위에는 HTML 노드가 존재한다. 그리고 head 노드와 body 노드가 자식 노드가 된다. 여기서 신기한 점은, HTML 문서의 태그들이 객체로 생성되어 노드 트리를 구성할 때, HTML문서에 존재하는 공백과 문자들이 Text Node라는 이름으로 노드 트리의 구성원이 된다.
+
+# 노드 vs 요소
+
+DOM을 구성하는 객체는 노드이며, 요소는 노드의 종류 중 하나라 볼 수 있다.
+노드를 크게 요소노드와 텍스트노드로 나눌 수 있으며, 요소노드는 HTML의 태그가 객체화 된 것이며, 텍스트 노드는 들여쓰기, 텍스트 등이 객체화 된 것이다.
+
+요소노드는 HTML요소와 관련된 다양한 메소드가 제공되며, 여러가지를 수정할 수 있지만
+
+텍스트 노드는 단순히 텍스트 내용을 바꿀 수 있다.
+
+_**쿼리(선택)은 요소 노드에 대해서만 가능하다.
+**_
+
+> 우리가 크롬 개발자 도구의 elements(요소) 탭에서 볼 수 있는 HTML 태그들은 사실 DOM에서 가져온 노드들이다.
+
+# Document 객체
+
+document.body
+document.head
+document.documentElement(HTML 요소노드 선택)
+과 같이 점 접근법을 이용할 수 도 있지만, 쿼리 메서드를 주로 이용한다.
+
+## querying elements
+
+### 요소 단일 선택
+
+DOM 객체의 참조값을 리턴해줌.
+
+#### 1. querySelector()
+
+CSS 선택자를 이용
+
+- 클래스로 선택할 경우 앞에 .
+- id로 선택할 경우 앞에 #
+- 태그도 이용 가능
+
+```javascript
+document.querySelector(".list-item");
+document.quertSelector("ul li:first-of-type");
+```
+
+querySelector는 처음으로 조건과 부합하는 객체를 내놓는다.
+
+만약 이미 어떤 노드를 선택하고, 그 노드의 자식 노드를 선택하고자 할 때에는 quertSelector()나 querySelectorALl()을 이용해야 한다.
+
+#### 2. getElementById()
+
+HTML의 id로 선택, id는 페이지에서 고유하기 때문에 오직 하나만 반환
+id를 선택할 때 앞에 #을 붙이지 않아도 됨
+
+### 요소 다중 선택
+
+유사 배열 객체인 요소 집합(노드 리스트)을 리턴함
+
+#### 1. querySelectorAll()
+
+querySelector의 여러개 버전 - 일치하는 모든 항목을 반환
+정적 노드리스트를 반환
+
+#### getElementsByClassName() & getElementsByTagName()
+
+동적 노드리스트를 반환
+옛날 선택자.
+HTMLCollection이라는 유사 배열을 반환한다.
+
+> CSS선택자를 이용해 유연하게 선택할 수 있는 querySelector와 querySelectorAll을 사용하자
+
+# DOM 프로퍼티 설정
+
+DOM을 querySelector나 점 접근법으로 선택했다면, 활용할 수 있다.
+
+```javascript
+const ul = document.querySelector("ul li:last-of-type");
+ul.textContent = ul.textContent + " Changed";
+```
+
+query메소드로 가져온 객체를 변수에 저장한 뒤, 점 접근법으로 프로퍼티에 접근해 수정할 수 있다. 위의 코드는 ul리스트의 가장 마지막 li의 내용을 기존 내용에 'Changed' 라는 텍스트를 덧붙이는 결과를 낳는다.
+
+요소 조작에 관해서 속성과 프로퍼티의 차이점을 알고 있어야 한다.
+
+## 속성(Attribute) VS 프로퍼티(Property)
+
+attribute는 HTML의 태그에서 태그명 이후에 태그에 대한 추가 정보를 설정하는 태그 내의 설명이다.
+
+쉽게 말해서
+
+```html
+<h1 class="heading">안녕하세요</h1>
+```
+
+여기선 class가 Attribute라는 말이다.
+
+프로퍼티는 브라우저가 이러한 html의 태그들을 객체화 할 때 태그의 어트리뷰트들이 관리되는 곳이다. 즉 속성이 프로퍼티로 변환된다는 의미이다.
+
+속성과 프로퍼티는 1대1로 실시간 동기화 되어있다. 따라서 속성을 바꾸면 프로퍼티에 업데이트되며, 프로퍼티를 바꿔도 속성에 반영된다.
+
+주의할 점은 속성과 프로퍼티가 매칭된 관계에서 반드시 이름이 동일하지 않으며, 항상 쌍방향의 업데이트가 일어나진 않는다.
+
+input태그의 경우 value 속성을 바꾸면 프로퍼티가 업데이트 되지만, 프로퍼티를 바꿔도 속성값은 변화가 없다.
+
+![](https://velog.velcdn.com/images/heeyoon1302/post/50188cfa-685e-4564-ad33-2a7c7f643dfc/image.png)
+
+다음과 같은 input 박스가 존재하며, 개발자 도구 상에서 프로퍼티를 업데이트 했을 때 어떤 일이 일어나는지 보여주겠다
+
+![](https://velog.velcdn.com/images/heeyoon1302/post/97666e2b-6d94-4603-b5ec-02d3023731a6/image.png)
+사진을 보면 value를 hello로 변경하였을 때 ui가 업데이트되었다. 이는 프로퍼티를 변경하여 이것이 프로퍼티 상에서는 일단 저장되었다는 것이다. 그러나 ![](https://velog.velcdn.com/images/heeyoon1302/post/bedd1bed-8fc8-403e-87ba-57651a547ae1/image.png)
+
+HTML 태그에서 변경된 요소노드의 속성에서는 변화가 없다. 이것은 value의 특징이다. input의 type 프로퍼티를 변경하면 개발자 도구의 요소 탭에서도 type의 속성값이 업데이트 됨을 알 수 있다.
+
+value와 같은 경우에 프로퍼티를 변경했을 때 속성 또한 변경하고자 한다면
+`setAttribute()` 메소드를 이용하면 된다.
+
+```javascript
+inputBox.setAttribute("value", "new value");
+```
+
+# 부모,자식,선조,후손
+
+querySelector로 dom을 선택할 때 분명 한계는 존재한다. 예를 들어 ul 태그 내의 여러개의 li 태그 중에서 4번째 요소를 선택하고자 할 때, class가 li들이 모두 같은 경우에는 선택할 수 없다. 이 대 부모,자식,선조,후손 관계를 이용한다
+
+## 자식,후손 관계
+
+자식은 요소의 바로 아래 요소를 말하며, 후손은 그 이하의 요소 - 즉 최소 2단계는 아래로 들어가는 관계인 경우를 말한다 -
+
+querySelctor로 ul요소를 선택한 후, 해당 요소를 `children` 또는 `choldNodes`로 자식과 후손 노드에 접근한다.
+
+- children
+  유사 배열 객체인 HTMLCollection을 반환하여, 인덱스로 원하는 노드에 접근 가능하다.
+  텍스트 노드는 반환하지 않고 오직 요소 노드만 반환한다.
+- choldNodes
+  NodeList를 반환하며, 인덱스로 접근가능하다.
+  텍스트 노드 또한 반환한다.
+
+첫번째 혹은 마지막 노드만을 반환할 수 도 있다.
+`firstElementChild`와 `lastElementChild`는 첫번째와 마지막 요소노드에 접근가능하며,
+`firstChild`와 `lastChild`는 첫번째와 마지막 노드에 접근가능하다.
+
+## 부모,선조 관계
+
+- parentNode와 parentElement 두 방법으로 접근가능하며, document 그 자체의 부모를 찾으려고 하지 않는 이상 두 방법 모두 사용할 수 있다.
+- 부모는 기본적으로 한 요소만 존재한다.
+- 선조를 선택하고자 한다면 closet메소드를 이용하면 된다. CSS선택자를 지원한다.
+
+```javascript
+const firstLi = document.querySelector("ul");
+const ul = firstLi.parentNode;
+//parentElement도 가능
+const input = firstLi.closet("input");
+//input이 firstLi의 조성이어야 가능 아니면 null이 반환됨.
+```
+
+# 형제 관계
+
+- HTML 코드 상에서 위쪽의 요소를 선택하고자 한다면
+  `previousElementSibling` 또는 `previousSibling`
+  전자를 추천한다. 왜냐하면 전자는 해당 요소노드에서 가장 가까운 위쪽의 요소노드를 탐색하고, 후자는 해당 요소노드에서 가장 가까운 위쪽의 노드를 탐색한다. 따라서 후자를 사용할 경우 대부분은 텍스트 노드가 반환된다.
+- 반대방향으로는
+  `nextElementSibling` 과 `nexrSibling` 이 존재한다.
+
+형제를 찾을 경우 위의 키워드를 사용하는 것은 querySelector를 사용하는 방식보다 수행 속도가 빠르다.
+
+# DOM 요소 스타일링
+
+요소에 접근하여 스타일을 변경하는 방법으로 크게 3가지가 있다.
+
+## 1.인라인 CSS 변경하기
+
+점 접근법을 통해 CSS 코드를 수정하면, 인라인 CSS를 수정할 수 있다.
+
+```javascript
+const ul = document.querySelector("ul");
+ul.style.backgroundColor = "red";
+```
+
+## 2. css 클래스를 활용하기
+
+```css
+    <style>
+      .red-bg {
+        background-color: red;
+        color: white;
+      }
+      .visible {
+        display: block;
+      }
+      .invisible {
+        display: none;
+      }
+      .modalDesign {
+        position: fixed;
+        background-color: lightblue;
+        color: black;
+        width: 50%;
+        height: 50%;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+      }
+    </style>
+```
+
+위와 같은 css 클래스들이 존재할 때, 자바스크립트에서 요소의 className을 css 클래스 이름으로 지정하면 스타일을 적용할 수 있다.
+
+```javascript
+button.addEventListener("click", () => {
+  if (modal.className === "invisible") {
+    console.log("show");
+    modal.className = "modalDesign";
+  } else {
+    console.log("안보이게");
+    modal.className = "invisible";
+  }
+});
+```
+
+## 3.classList이용하기
+
+```javascript
+ul.className = "red-bg visibe";
+```
+
+위 코드와 같인 하나의 요소에 대해 여러 스타일을 적용할 수 있다. 이렇게 className을 통해 직접 지정할 수 있지만, classList를 이용할 수 도 있다.
+classList를 사용하면 `contains` 를 이용해 해당 CSS class가 존재하는지 알거나, `add`로 추가할 수 있고 `remove`로 삭제할 수 있고, `replace`로 old CSS class를 new CSS class로 교체할 수 있으며, `toggle`로 토글 기능을 이용할 수 있다. 토글 기능은 이항대립적으로 작용하여 A클래스를 B클래스로 바꿔주고, B클래스를 A클래스로 바꿔준다.
+
+토글의 예시는 다음과 같다.
+
+```javascript
+button.addEventListener("click", () => {
+  modal.classList.toggle("invisible");
+});
+```
+
+토글을 이용하면 위와 같이 모달창을 껏다 키는 기능을 간단하게 구현할 수 있다.
+
+# DOM에 요소 추가하기
+
+지금까지의 과정은 DOM에 있는 기존 요소를 선택하고 수정하는 작업이었다.
+그렇다면 DOM에 요소를 추가하기 위해서는 어떤 작업이 필요할까?
+
+## innerHTML과 insertAdjancetHTML
+
+innerHTML은 선택한 해당 요소를 내가 작성한 HTML 코드로 완전히 봐꾸는 작업을 수행한다. 따라서 내가 만약 ul안에 li를 마지막에 하나 더 추가하고 싶다면 다음과 같이 코드를 작성한다.
+
+```javascript
+div.innerHTML = div.innerHTMl + "<li> 4th list </li>";
+```
+
+코드의 작성이 불편한 것도 있지만, 위 작업을 수행할 경우 단순히 li 추가되는 것이 아니라 div 전체가 재렌더링되기 때문에 성능 저하가 발생한다.
+
+이와 달리 insertAdjancetHTML은 선택한 요소의 앞 또는 뒤에 추가할 새 요소만 렌더링하여 성능 부화가 덜하다.
+
+```javascript
+div.insertAdjancentHTML('beforeend', <li>4th list </li>
+```
+
+그러나 이러한 접근 방식은 새롭게 추가된 요소에 접근할 수 없으며 복잡한 작업이 불가능하다. 새롭게 추가된 요소에 대해 이벤트 리스너를 추가하지 못한다.
+
+## document.createElement
+
+위에서 제시한 문제를 해결하는 방법은 `document.createElement`이다.
+이는 내가 원하는 종류의 요소를 생성하고, appenChild를 통해 선택한 요소에 내가 만든 요소를 추가하면 된다.
+
+```javascript
+const newLi = document.createElement("li"); //태그명을 입력
+list.appendChild(newLi);
+newLi.textContent = "4th list";
+newLi.style.backgroundColor = "red";
+```
+
+위와 같이 코드를 작성하면 내가 생성한 요소를 선택할 수 있다는 큰 장점이 생기고, 재상용의 가능성도 높아진다.
+
+특정 요소의 앞,뒤에 새로운 요소를 추가하는 방법으로 `before`,`after` 등이 존재하지만, safri에서는 지원하지 않는 큰 단점이 존재한다. 따라서 위에서 소개한 `insertAdjancetHTMl`을 통해 더 쉽게 이용 가능하다.
+
+```javascript
+const newLi = document.createElement("li");
+newLi.textContent = "4th list";
+const secondLi = list.childeren[1];
+secondLi.insertAdjacentHTML("afterend", newLi);
+//secondLi 이후에 추가하는 명령이다.
+```
+
+> 요소를 복사하고 싶을 때에는 선택한 요소에 대해`clineNode`라는 메소드를 이용하면 된다.
+
+# 정적 리스트 VS 동적(live) 리스트
+
+`querySelectorAll` 를 사용하면 정적 노드 리스트가 반환된다. 그렇다면 정적이라는 말은 무슨 뜻일까? 먼저 한 번 반환된 노드 리스트는 업데이트 되지 않는다. 따라서 ul요소의 노드 리스트를 반환받고, 이후 ul에 요소를 추가한다 하더라도 노드 리스트에는 변경사항이 업데이트 되지 않는다. 이러한 의미에서 `정적` 이라는 용어를 사용한다. 노드리스트는 DOM의 스냅샵과도 같다. 그러나 이 스냅샷은 DOM과 참조 관계를 유지한다. 따라서 노드리스트의 객체 접근해 정보를 수정하면 실시간으로 UI에 반영된다. 이러한 점에서는 정적인 특성과는 반대되는 모습을 보이기도 한다.
+
+동적 리스트는 이와 반대로 요소가 추가되면 추가된 요소가 동적 리스트에 반영되고, 리스트를 통해 접근 또한 가능해진다.
+
+# 요소 삭제
+
+요소를 삭제하는 방법은 두 가지다. 먼저 요소에 접근해 `remove` 메소드를 이용하거나, 부모 요소에 접근해 `removeChild` 메소드를 이용하는 것이다.
+전자는 간편하지만 인터넷 익스플로러에서 지원하지 않아, 이 경우를 고려해야 한다면 후자의 방법을 사용하면 된다.
+
+```javascript
+const list = document.querySelector("ul");
+list.remove();
+또는;
+list.parentElement.removeChild(list);
+```
+
+# Toggle
+
+classList의 toggle 기능을 활용하면 쉽게 모달을 켜고 끌 수 있다.
+
+```javascript
+const backDropToggle = () => {
+  backDrop.classList.toggle("visible");
+};
+```
+
+toggle은 해당 CSS 클래스가 존재하면 CSS 클래스를 삭제하고, 존재하지 않으면 추가하는 방식이다. 따라서 만약 display : block 등의 내용을 담고 있는 CSS 클래스 visible이 존재한다면, 위와 같이 활용할 수 있다. classList는 DOM이 가지고 있는 모든 CSS 클래스를 반환한다.
+
+# DOM에 추가하기
+
+게시판 기능을 구현하고자 할 때, 내가 input창에 기입한 정보를 토대로 그것이 리스트의 구성요소가 되어 추가되어야 한다.
+
+DOM 객체를 만들고 추가하는 순서는 다음과 같다(리스트를 추가하는 상황 가정)
+
+1. `createElement`를 통해 DOM 객체를 만든다
+2. `className`을 지정해 스타일을 입힌다.(CSS 클래스가 만들어져있다는 가정 하에)
+3. `innerHTML`을 통해 아까 만든 DOM객체에 내용을 추가한다.
+4. 만든 객체를 `append`를 통해 리스트를 추가한다.
+
+```javascript
+const renderNewMovie = (imageUrl, title, rating, id) => {
+  const newMovieElement = document.createElement("li");
+  newMovieElement.className = "movie-element";
+  newMovieElement.innerHTML = `
+    <div class = "movie-element__image">
+      <img src ="${imageUrl}" alt=${title}>
+    </div>
+    <div class="movie-element__info">
+      <h2>${title}</h2>
+      <p>${rating}/5 stars</p>
+    </div>
+  `;
+  const listRoot = document.getElementById("movie-list");
+  newMovieElement.addEventListener("click", deleteModal.bind(null, id));
+  //바로 위 라인 코드는 새로 만든 객체에 이벤트리스너를 달아주는 것이다.
+  listRoot.append(newMovieElement);
+  console.log(listRoot);
+};
+```
+
+# 이벤트 리스너의 재생성을 방지하는 방법
+
+만약 반복적으로 실행되는 함수안에 이벤트 리스너를 지정하는 코드가 작성되어있다면, 함수가 실행될 때 마다 이벤트 리스너가 생성되어, 이벤트가 발생하였을 때 생성된 이벤트 리스너만큼 이벤트 리스너에 연결딘 함수가 실행될 것이다. 이러한 상황은 끔찍하기 때문에 피해줘야 한다.
+
+## 호출되는 함수에 bind()를 사용하지 않은 경우
+
+이러한 경우는 간단하게 `removeEventListner`를 이용하면 된다. 주의할 점은 이것을 먼저 호출한 뒤에 이벤트리스너를 등록해야 한다. 왜냐하면 remove가 뒤에 호출되면 앞전에 존재하는 모든 이벤트 리스너가 삭제되기 때문이다. 하나를 남겨놓기 위해 다음과 같이 코드를 작성한다.
+
+```javascript
+cancleButton.removeEventListener("click", closeConfirmModal);
+cancleButton.addEventListener("click", closeConfirmModal);
+```
+
+## 호출되는 함수에 bind()를 사용한 경우
+
+이러한 경우는 복잡해진다. 왜냐하면 removeEventListner가 먹지를 않기 때문이다.
+
+1. DOM에서 객체를 가져오고
+2. 그 객체를 복제하여 기존 것을 대체하고
+3. 대체된 객체를 다시 선택해 이벤트리스너를 추가한다
+
+```javascript
+// 1. DOM에서 객체를 가져옴
+let approveButton = cancleButton.nextElementSibling;
+// 2. 가져온 객체를 복제하여 가져온 객체를 대체함
+// 이 과정은 새로운 객체를 만들어서 대체하는 것이므로 이벤트리스너가 없고,
+// 변수 approveButton의 참조도 끊긴다.
+approveButton.replaceWith(approveButton.cloneNode(true));
+// 3. 따라서 새로 만들어서 대체한 객체를 다시 참조한다.
+approveButton = cancleButton.nextElementSibling;
+// 4. 이벤트 리스너를 추가한다.
+approveButton.addEventListener(
+  "click",
+  approveMovieDeleteHandler.bind(null, id)
+);
+```
+
+정말 쉽게 말하면 초기화 한다음에 이벤트 리스너를 추가하는 것이다. 위의 상황이랑 원리는 동일하다는 뜻이다.
+
+# input창의 값을 가져와 객체를 만들고 배열에 저장하는 과정
+
+```javascript
+const modalAddButtonHandler = () => {
+  const titleValue = userInputs[0].value;
+  const imageUrlValue = userInputs[1].value;
+  const ratingValue = userInputs[2].value;
+  if (
+    titleValue.trim() === "" ||
+    imageUrlValue.trim() === "" ||
+    ratingValue.trim() === "" ||
+    ratingValue < 1
+  ) {
+    alert("올바르게 입력하시오");
+  } else {
+    //객체를 만듦
+    const movie = {
+      id: Math.random().toString(),
+      title: titleValue,
+      imageUrl: imageUrlValue,
+      rating: ratingValue,
+    };
+    //만든 객체를 배열에 저장함
+    movies.push(movie);
+    updateBanner();
+    closeModal();
+    renderNewMovie(imageUrlValue, titleValue, ratingValue, movie.id);
+    console.log(movies);
+  }
+};
+```
