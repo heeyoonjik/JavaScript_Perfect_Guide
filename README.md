@@ -1240,3 +1240,526 @@ const modalAddButtonHandler = () => {
   }
 };
 ```
+
+# 배열 생성 방법
+
+- 기본적인 생성 방식
+
+```javascript
+const arr1 = [1, 2, 3];
+```
+
+- new를 이용한 생성 방식
+
+```javascript
+const arr1 = new Array(1, 2, 3);
+```
+
+- new 생략
+
+```javascript
+const arr1 = Array(1, 2, 3);
+```
+
+- of함수 이용
+
+```javascript
+const arr1 = Array.of(1, 2, 3);
+```
+
+<br />
+
+만약 인자로 숫자 하나를 제공하면, 숫자 크기의 빈 배열이 생성됨
+
+```javascript
+const arr1 = Array(5);
+//크기가 5인 빈 배열 생성
+```
+
+- 이터러블, 유사 배열 객체를 진짜 배열로 변환
+
+```javascript
+const listItems = document.querySelector("li");
+const listItemsArray = Array.form(listItems);
+
+const name = Array.form("KIM");
+console.log(name);
+//['K','I','M']
+```
+
+# 자바스크립트의 배열은 관대하다
+
+자바스크립트에서 배열 안 요소가 서로 다른 타입이더라도, 그것을 허용하고 있다. 예를 들어
+
+```javascript
+const arr1 = ["DOG", 2, true];
+```
+
+위와 같이 작성하여도 오류가 발생하지 않는다.
+
+또한 자바스크립트에서는 중첩 배열을 사용할 수 있다.
+
+```javascript
+const arr1 = [
+  [212, 31],
+  ["dsvds", "dsvs"],
+];
+for (const insideArr of arr1) {
+  for (const data of insideArr) {
+    console.log(data);
+  }
+}
+//212 31 dsvds dsvs
+```
+
+중첩 배열 사용 중에서도 자바스크립트는 관대하기 때문에, 내부 배열의 데이터 타입이 서로 달라도 문제 없다.
+
+# 배열의 삽입,삭제
+
+배열의 아이템을 삽입하는 방법은 다음과 같다.
+
+- push
+  배열 끝 부분에 새로운 아이템 추가
+
+```javascript
+const hobbies = ["Sports", "Cooking"];
+hobbies.push("Coding");
+console.log(hobbies);
+//['Sports','Cooking','Coding']
+```
+
+- unshift
+  배열 앞 부분에 새로운 아이템 추가
+
+```javascript
+const hobbies = ["Sports", "Cooking"];
+hobbies.unshift("Coding");
+console.log(hobbies);
+//['Coding','Cooking']
+```
+
+- pop
+  배열 마지막 요소를 삭제,리턴
+
+```javascript
+const hobbies = ["Sports", "Cooking"];
+hobbies.pop();
+console.log(hobbies);
+//['Sports']
+```
+
+- shift
+  배열 첫 번째 요소를 삭제,리턴
+
+```javascript
+const hobbies = ["Sports", "Cooking"];
+hobbies.shift();
+console.log(hobbies);
+//['Cooking']
+```
+
+**배열의 할당되지 않은 인덱스에 아이템 저장을 시도한다면?**
+
+```javascript
+const hobbies = ["Sports", "Cooking"];
+hobbies[5] = "Coding";
+console.log(hobbies[5]);
+console.log(hobbies[3]);
+//'Coding'
+//undefined
+```
+
+자바스크립트는 관대하기 때문에 할당을 허용하고, 배열을 해당 인덱스만큼 늘리기 때문에, 중간은 비어있게 되는 것이다.
+
+## splice()
+
+기본적으로 배열의 양 끝이 아닌, 아이템 사이에 새로운 아이템을 추가하기 위해 사용되는 메소드이다.
+
+```javascript
+const hobbies = ['Sports','Cooking'];
+hobbies.splice(1,1,'Soccer'];
+console.log(hobbies);
+//['Sports','Soccer'];
+```
+
+splice의 첫 번째 인자는 기준 인덱스이다. 두 번째 인덱스는 삭제할 아이템의 개수이다. 기준 인덱스에서 시작하여 인자의 크기만큼 아이템을 삭제한다.
+세 번째 인자는 추가할 아이템이다. 세 번째 인자부터는 여러 개의 인자를 넣을 수 있으며, 배열의 아이템으로 추가된다.
+
+```javascript
+const hobbies = ['Sports','Cooking'];
+hobbies.splice(1,1,'Soccer','Golf'];
+console.log(hobbies);
+//['Sports','Soccer','Golf'];
+```
+
+세 번째 인자를 제공하지 않으면, 아이템이 그저 삭제될 뿐이다. 따라서 아이템 삭제를 위해 splice 메소드를 사용하기도 한다.
+
+```javascript
+hobbies = ["Socccer", "Drawing", "Coding"];
+hobbies.splice(0);
+condole.log(hibbues);
+//[]
+```
+
+splice에 그저 인자로 0을 전달하면, 배열이 초기화 된다.
+
+splice메소드의 인자로 음수 값을 이용할 수 있는데, -1은 배열 맨 뒤의 아이템을, -2는 뒤에서 두 번째의 아이템을 접근할 수 있다. 이는 splice()에서 사용할 수 있는 개념이지 자바스크립트 전체에서 보편적으로 사용할 수 있는 개념은 아니다.
+
+# slice()
+
+slice()는 기본적으로 새로운 배열을 리턴한다. 따라서 만약 배열을 진정한 의미로 복사(배열의 메모리 위치 복사가 아닌 값 복사)를 원한다면 slice()를 이용하면 된다.
+
+```javascript
+arr = [1, 2, 3, 4, 5];
+arr2 = arr.slice();
+arr.pop();
+console.log(arr2);
+//[1,2,3,4,5]
+```
+
+slice의 원래 용도는 이름 그대로 자르기 또는 여러개의 요소 선택이라고 할 수 있다.
+
+- 하나의 인자를 제공할 경우
+  배열이 그 인자를 시작으로 마지막 요소까지 포함하여 새로운 배열을 리턴한다
+
+```javascript
+arr = [1, 2, 3, 4, 5];
+arr2 = arr.slice(2);
+console.log(arr2);
+//[3,4,5]
+```
+
+- 두 개의 인자를 제공할 경우
+  배열의 첫번째 인자의 인덱스를 시작으로 두 번째 인자의 인덱스를 포함하지 않고 그 전까지의 요소로 새로운 배열을 리턴한다.
+
+```javascript
+arr = [1, 2, 3, 4, 5];
+arr2 = arr.slice(1, 3);
+console.log(arr2);
+//[2,3]
+```
+
+음수 인덱스를 인자로 제공할 수 있지만, 만약 그렇다면 두 인자 모두 음수로 제공해야 한다.
+
+# concat()
+
+concat() 은 두 배열을 연결해주는 메소드이다. 인자로 제공한 배열과 기존 배열을 합쳐 새로운 배열을 리턴한다.
+
+```javascript
+arr = [1,2,3,4,5];
+arr2 = arr.concat([2,3]
+console.log(arr2);
+//[1,2,3,4,5,2,3]
+```
+
+# 요소 찾기 - indexOf(), lastIndexOf()
+
+indexOf() 특정 요소가 배열에 존재하는지, 만약 존재한다면 인덱스는 무엇인지를 알려주는 메소드이다. indexOf는 인덱스0을 시작으로 각각의 요소가 사용자가 제공한 값과 일치하는 지 비교하며, 만약 일치한다면 함수는 그 값의 인덱스를 리턴하며 종료된다. 따라서 동일한 값이 배열에 여러개 존재한다고 하더라도, 모든 값들의 인덱스를 한 번에 알 수 없다. 배열 탐색의 기준을 마지막 요소로 하고 싶다면(즉 맨 처음이 아니라 맨 끝부터 탐색하고 싶으면) lastIndexOf()를 사용하면 된다.
+두 메소드 모두 요소를 찾지 못하면 -1을 리턴한다.
+
+```javascript
+arr = [1, 2, 3, 2, 5];
+console.log(arr.indexOf(2));
+//1
+console.log(arr.lastIndexOf(2));
+//3
+```
+
+그런데 만약 배열에 객체가 저장되어있다면, indexOf와 last... 는 사용하지 못한다. 즉 다음과 같이 이용이 불가능하다는 뜻이다.
+
+```javascript
+arr = [{ name: "KIM" }, { name: "LEE" }];
+console.log(arr.indexOf({ name: "KIM" }));
+//-1  -> 어떤 요소도 찾지 못함.
+```
+
+# find()
+
+find()는 배열 안에 객체 또한 탐색할 수 있는 함수이며 인자는 콜백함수를 받는다. 콜백함수는 3개의 인자를 받는데, 현재 처리중인 배열의 요소, 현재 처리중인 배열의 index, find()가 호출하는 배열이다.
+콜백 함수를 따로 정의해도 좋지만, 익명함수를 이용해 find()에서만 이용하게 하는 것이 효율적이다.
+
+```javascript
+arr = [{ name: "KIM" }, { name: "LEE" }];
+const lee = arr.find((person, index, persons) => {
+  return person.name === "LEE";
+});
+console.log(lee);
+//{name : 'LEE'}
+lee.name = "PARK";
+console.log(arr);
+//[{name : 'KIM'}, {name : 'PARK'}]
+```
+
+find()는 발견한 해당 요소를 리턴한다. 주의할 점은 이 요소는 새로운 요소가 아니다. 즉 기존의 메모리 주소를 그대로 가지고 있다. 따라서 이 요소를 수정하면, 기존의 배열또한 수정된다.
+
+`findIndex` 를 사용하면 요소 그 자체가 아닌 요소의 인덱스를 알 수 있다.
+
+# includes()
+
+includes는 배열 안에 원소가 존재하는 지 확인하는 메소드이다. indexOf와 동일한 기능을 수행하지만, 그와 다르게 인덱스를 리턴하지 않고 단순히 존재 여부만을 리턴한다. 따라서 리턴값도 `true` 와 `false` 밖에 없다. 당연하게도 존재하면 true, 존재하지 않으면 false를 리턴한다.
+
+# forEach()
+
+forEach는 배열의 모든 원소를 순회하여 접근하기 용이한 메소드이다.
+
+```javascript
+arr = [1, 2, 3, 4, 5];
+arr.forEach((price) => {
+  console.log(price * 100);
+});
+//100
+//200
+//300
+//400
+//500
+```
+
+find와 마찬가지로 콜백함수를 인수로 받으며, 콜백함수는 현재 접근하고 있는 원소와 그 원소의 인덱스, 그리고 전체 배열을 인자로 받는다.
+
+# map()
+
+map은 forEach()와 거의 동일하지만, 새로운 배열을 리턴한다.
+
+```javascript
+arr = [1, 2, 3, 4, 5];
+const arr2 = arr.map((price) => {
+  return price * 100;
+});
+
+console.log(arr2);
+//[100,200,300,400,500]
+```
+
+# sort()
+
+sort()는 배열을 정렬하기 위해 사용한다. 인자에 아무값도 전달하지 않으면 숫자 혹은 문자의 오름차순으로 정렬된다. 그러나 다음과 같은 경우에는 문제가 생긴다.
+
+```javascript
+arr = [10, 4, 3, 2, 5];
+console.log(arr.sort());
+//[10,2,3,4,5]
+```
+
+sort()는 배열의 원소를 정렬할 때 원소가 숫자라 할 지라도 문자열로 판단하여 배열을 정렬한다. 그리고 문자열을 비교할 때에는 문자열의 첫 글자끼리 비교한다. 따라서 10은 2보다 크지만 10의 첫 문자인 1과 2를 비교하게 되어서 10이 2보다 작다고 결과가 산출된다. 이러한 현상을 막기 위해서 자체적인 콜백함수를 이용해야 한다.
+콜백함수는 두 개의 인자를 받으며 이 인자들 끼리 비교하게 된다.
+콜백함수의 리턴값이 양수일 경우 비교하는 두 원소(a,b)중 b를 a보다 낮은 인덱스로 조정한다. 음수면 a를 b보다 낮은 인덱스로 조정하며, 0이면 그대로 둔다.
+따라서 다음과 같이 이용한다.
+
+```javascript
+arr = [10, 4, 3, 2, 5];
+console.log(
+  arr.sort((a, b) => {
+    if (a === b) {
+      return 0;
+    } else if (a > b) {
+      return 1;
+    } else {
+      return -1;
+    }
+  })
+);
+//[2,3,4,5,10]
+```
+
+# filter()
+
+filter는 배열을 특정 조건으로 필터링하기 위해 사용된다. filter는 새로운 배열을 리턴한다.
+
+```javascript
+arr = [10, 4, 3, 2, 5];
+console.log(
+  arr.filter((obj) => {
+    return obj > 3;
+  })
+);
+//[4,5,10]
+console.log(arr);
+//[10,4,3,2,5]
+```
+
+# 화살표 함수로 간편하게 콜백함수를 작성하자
+
+filter함수의 예시에서 그리고 다른 수 많은 배열함수들의 콜백함수는 3가지의 인자를 갖지만 보통 첫 번째 인자만을 이용하는 경우가 대다수이다 따라서 콜백함수를 화살표 함수로 다음과 같이 간단하게 표현할 수 있다.
+
+```javascript
+arr = [10, 4, 3, 2, 5];
+console.log(arr.filter((obj) => obj > 3));
+//[4,5,10]
+console.log(arr);
+//[10,4,3,2,5]
+```
+
+# reduce()
+
+reduce()는 배열의 원소를 순회하며 콜백함수의 실행값을 누적해 하나의 값을 반환한다. 기존 배열은 수정되진 않는다. 예시를 통해 알아보자
+
+```javascript
+arr = [10, 4, 3, 2, 5];
+console.log(
+  arr.reduce((pre, cur, preInx, curInx) => {
+    return pre + cur;
+  }, 0)
+);
+```
+
+콜백함수는 4가지의 인자를 받으며, 이전 실행값, 현재 요소 값, 그리고 인덱스들이다.
+최초의 콜백함수의 실행에는 이전값이 존재하지 않기 때문에 reduce의 두 번째 인자로 콜백함수의 최초 실행의 이전값을 전달할 수 있다. 나는 0으로 전달한 것이다. 내가 정의한 콜백함수를 통해 나는 모든 원소들의 합을 구할 수 있었다.
+
+# 메소드 체인 - map과 reduce를 연속으로 사용하기
+
+```javascript
+const originalArray = [{ price: 10.99 }, { price: 5.99 }, { price: 29.99 }];
+const sum = originalArray
+  .map((obj) => obj.price)
+  .reduce((sumVal, curVal) => sumVal + curVal, 0);
+//46.97
+```
+
+위와 같이 먼저 map 함수가 실행된 뒤 반환된 배열을 reduce함수로 실행하여 처리할 수 있다.
+
+# join과 split
+
+`split` 은 문자열을 배열로 만들어주는 메소드이다. 정확히는 말 그대로 문자열을 특정 기준으로 쪼개어서 배열에 저장해준다.
+
+```javascript
+const a = "kim;min;ju";
+console.log(a.split(";"));
+//[kim,min,ju]
+```
+
+split에는 반드시 하나 이상의 인자를 전달해야 하는데, 첫 번째 인자는 쪼개기 기준이고, 두 번째 인자는 새로 생성되는 배열의 원소 최대 개수이다.
+
+`join`은 split의 역과정으로 배열을 하나의 문자열로 만들어준다.
+
+```javascript
+const a = "kim;min;ju";
+const b = a.split(";");
+const c = b.join(" ");
+console.log(c);
+```
+
+join은 반드시 인자를 전달하지 않아도 되지만 그렇게 하면 문자열로 접합할 때 이어지는 부분을 ','로 처리한다. 따라서 인자를 통해 연결부위를 정해주는 것이 좋다. 나는 " "로 한 것이다.
+
+# 스프레드 연산자
+
+`...`을 통해 사용하는 스프레드 연산자는 배열의 전체 원소를 배열이 아닌 형태로 반환한다. 따라서 배열을 복사할 때 유용하게 사용할 수 있다.
+
+```javascript
+const num = [1, 2, 3, 4];
+const num2 = [...num, 5, 6];
+console.log(num2);
+//[1,2,3,4,5,6]
+```
+
+또한 스프레드 연산자를 다음과 같이 이용할 수 있다.
+
+```javascript
+const num = [1, 2, 3, 4];
+console.log(Math.min(...num));
+//1
+```
+
+배열 복사 시에 스프레드 연산자를 이용할 때 주의할 점은 배열의 원소가 객체일 때이다. 객체는 참조값으로 값이 아닌 값의 주소가 복사되기 때문에 진정한 의미의 복사가 되지 않는다. 따라서 원소가 객체인 배열을 완전한 형태로 복사하기 위해서는 map함수를 이용해야 한다.
+
+```javascript
+const persons = [{ name: "KIM" }, { name: "MIN" }];
+const coppiedPersons = persons.map((person) => ({
+  name: person.name,
+}));
+```
+
+# 구조 분해 할당과 레스트 연산자
+
+배열의 각 원소를 개별 변수에 쉽게 저장해준다.
+
+```javascript
+const num = [1, 2, 3, 4, 5];
+const [fn, sn, ...restN] = num;
+console.log(fn, sn, restN);
+//1 2 [3, 4, 5]
+```
+
+배열의 첫 번째 원소를 첫 번재 변수에 저장하고, 이후 같은 방식으로 진행된다. 여기서 사용되는 `...`은 스프레드 연산자가 아닌 레스트 연산자로 불리며, 구조 분해 할당에서 남은 나머지 값들을 배열로 저장한다.
+
+# 배열 이외의 이터러블
+
+## Set
+
+Sets는 배열과 비슷하게 이터러블 자료구조 중 하나이며, 중복을 허용하지 않고 인덱스로 접근하지 않는다.
+Set은 다음과 같이 생성한다.
+
+```javascript
+const a = new Set();
+const b = new Set([1, 2, 3]);
+```
+
+생성자의 인자로 아무것도 전달하지 않으면 빈 Set이 생성되고, 다른 이터러블 객체를 전달하면 이터러블 객체의 값이 Set의 원소가 된다.
+`add` 나 `delete` 를 통해 원소를 삽입 삭제 할 수 있으며 `has` 를 통해 원소가 존재하는 지 확인한다.
+
+```javascript
+const b = new Set([1, 2, 3]);
+b.add(4);
+b.delete(1);
+console.log(b.has(1));
+//false
+```
+
+`values`와 for문을 이용하면 모든 원소를 순회할 수 있다. 왜냐하면 values가 setIterator라는 이터러블 객체를 반환하기 때문이다.
+
+```javascript
+const b = new Set([1, 2, 3]);
+for (const number of b.values()) {
+  console.log(number);
+}
+//1
+//2
+//3
+console.log(b.values());
+//SetIterator {1, 2, 3}
+```
+
+## Map
+
+map은 키-값 형태로 데이터를 저장하는 이터러블 자료구조이다.
+set과 동일하게 생성자 함수를 이용한다.
+
+```javascript
+const b = new Map();
+const a = new Map([
+  [1, "a"],
+  [2, "b"],
+]);
+a.set(3, "c");
+console.log(a);
+//Map(3) {1 => 'a', 2 => 'b', 3 => 'c'}
+```
+
+생성자에 인자를 전달하지 않으면 빈 Set이 생성되고 인자를 전달하면 초기화 할 수 있다. 먼저 가장 외부 배열이 필수적으로 들어가야 하며, 그 안에 여러 배열들을 넣는다. 각 배열 안은 키 - 벨류 쌍으로 구분된다.
+
+다양한 Map 메소드가 존재한다
+
+- set
+- get
+  키로 값 찾기
+- delete
+- clear
+
+size는 프로퍼티이며, 원소 개수를 저장한다.
+
+entries 이용하면 for문을 이용할 수 있다.
+
+```javascript
+const a = new Map([
+  [1, "a"],
+  [2, "b"],
+  [3, "c"],
+]);
+for (const [key, value] of a.entries()) {
+  console.log(key, value);
+}
+//1 'a'
+//2 'b'
+//3 'c'
+```
+
+구조 분해 할당 시 key만 저장할 수도 있다.

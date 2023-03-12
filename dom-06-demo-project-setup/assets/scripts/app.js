@@ -45,7 +45,6 @@ const renderNewMovie = (imageUrl, title, rating, id) => {
   const listRoot = document.getElementById("movie-list");
   newMovieElement.addEventListener("click", deleteModal.bind(null, id));
   listRoot.append(newMovieElement);
-  console.log(listRoot);
 };
 
 const deleteModal = (id) => {
@@ -105,7 +104,6 @@ const deleteInputValue = () => {
 };
 
 const backDropHanlder = () => {
-  console.log("tlqkf");
   closeConfirmModal();
   closeModal();
   backDropToggle();
@@ -137,7 +135,6 @@ const modalAddButtonHandler = () => {
     updateBanner();
     closeModal();
     renderNewMovie(imageUrlValue, titleValue, ratingValue, movie.id);
-    console.log(movies);
   }
 };
 
@@ -145,3 +142,12 @@ addMovieButton.addEventListener("click", openModal);
 backDrop.addEventListener("click", backDropHanlder);
 modalCancleButton.addEventListener("click", modalCancleButtonHandler);
 modalAddButton.addEventListener("click", modalAddButtonHandler);
+
+const a = new Map([
+  [1, "a"],
+  [2, "b"],
+  [3, "c"],
+]);
+for (const [key, value] of a.entries()) {
+  console.log(key, value);
+}
