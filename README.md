@@ -1763,3 +1763,285 @@ for (const [key, value] of a.entries()) {
 ```
 
 구조 분해 할당 시 key만 저장할 수도 있다.
+
+객체기본
+객체는 키 - value 쌍으로 데이터를 저장한다. value에 함수가 들어가면 그 함수를 메소드라고 부른다
+
+# 추가하거나 삭제
+
+배열에 기존에 존재하지 않은 키 값을 추가하고자 할 때, 생성 후 접근하는 것이 아니라 바로 접근하면 된다. 자바스크립트에서는 존재하지 않는 키 값에 접근하려고 시도할 때, 새로 만들어주기 때문이다.
+
+삭제 시에는 `delete` 키워드를 사용하면 된다.
+
+```javascript
+const person = {
+  name: "KIM",
+  age: 12,
+  hobbies: ["coding", "soccer"],
+  greet: () => {
+    alert(`hi my name is ${person.name}`);
+  },
+};
+
+person.county = "Korea";
+delete person.age;
+
+console.log(person);
+//Korea undefined
+```
+
+# 대괄호 표기법
+
+기본적으로 점 표기법 이용한다. 하지만 `대괄호 표기법` 또한 존재하기 때문에 소개하겠다
+
+```javascript
+const person = {
+  first name = 'KIM';
+//위 코드는 무효하다
+};
+```
+
+위에서 제시한 방식의 키는 무효하다. 만약 저렇게 공백이 존재하게 두 단어로 키를 정의하고 싶다면 다음과 같이 해야 한다.
+
+```javascript
+const person = {
+  'first name' = 'KIM';
+//위 코드는 유효하다
+};
+```
+
+그렇다면 위와 같이 정의된 프로퍼티는 어떻게 접근할까? 기존의 점 표기법으로는 불가능하기 때문에 대괄호 표기법을 이용해야 한다.
+
+```javascript
+const person = {
+  "first name": "KIM",
+};
+
+console.log(person["first name"]);
+//KIM
+```
+
+대괄호 표기법 통해 CSS의 속성 또한 원래 이름으로 접근 가능하다. 자바스크립틍서 DOM을 통해 CSS 속성을 접근하고자 할 때, 원래 이름 대신에 변화된 이름을 사용했다. 예를 들어 background-color가 아닌 backgroundColor. 하지만 배열 표기법을 이용하면 이 문제를 해결할 수 있다.
+
+```javascript
+const movieList = document.getElementById("movie-list");
+
+movieList.style["background-color"] = "red";
+```
+
+## 프로퍼티 명명
+
+### 숫자
+
+객체에서 값을 저장할 때, 하나의 키-값 단위를 프로퍼티라고 부른다. 프로퍼티의 이름, 키는 보통 문자열로 짓지만, 숫자로도 가능하다.
+만약 프로퍼티가 숫자일 경우, 프로퍼티 접근에는 대괄호 표기법이 필요하다. 또한 여러 프로퍼티가 숫자일 경우, 객체는 자동으로 프로퍼티의 순서를 오름차순으로 정렬한다.
+
+```javascript
+const person = {
+  3: "bold",
+  1: "good",
+  2: "sad",
+};
+
+console.log(person["1"]);
+//good
+console.log(person);
+//{1: 'good', 2: 'sad', 3: 'bold'}
+//오름차순으로 프로퍼티가 정렬됨.
+```
+
+## 동적 명명
+
+상수에 하드코딩된 값을 이용하면, 여러 위치의 코드를 바꾸지 않고 상수값만 바꾸면 되는 코딩 원리는 익히 알 것이다. 이것을 객체의 프로퍼티 명명에 이용하고, 객체의 값을 가져올 때 사용할 수 있다.
+
+```javascript
+const variableValue = "inputValue";
+
+const person = {
+  [variableValue]: "fce",
+};
+
+console.log(person[variableValue]);
+//fce
+```
+
+이렇게 하면 객체의 프로퍼티 이름이 바뀌게 되더라도, `variableValue` 상수값만 바꾸면 되기 때문에 매우매우 편리하다
+
+# 스프레드 연산자
+
+배열에서 스프레드 연산자를 사용했듯이, 객체에서도 사용 가능하다. 스프레드 연산자를 사용해서 새로운 객체를 정의할 때, 스프레드 이후에 스프레드 연산자를 사용한 객체에 이미 존재하는 프로퍼티를 재정의 할 경우 새로운 프로퍼티 값으로 덮여씌어진다. 또한 객체 안에 배열(중첩 참조)이 들어있을 경우 완전한 복사를 위해서 다음과 같이 코딩해야 한다.
+
+```javascript
+const person = { name: "Kim", age: 12, hobbies: ["soccer", "coding"] };
+const person2 = { ...person, age: 22, hobbies: [...person.hobbies] };
+console.log(person2);
+/*
+age: 22
+hobbies: (2) ['soccer', 'coding']
+name: "Kim"
+*/
+```
+
+# 객체 구조 분해 할당
+
+배열에서 값들을 구조-분해-할당 했듯이, 객체에서도 가능하다. 단 다른 점은 순서에 의해서 할당되는 것이 아닌 키 이름에 의해 할당되는 것이다 다음과 같이 사용한다. `:` 를 사용해 할당하는 변수의 이름을 바꿀 수 있다.
+
+```javascript
+const person = {
+  name: "Kim",
+  age: 12,
+  info: {
+    country: "Korea",
+    language: "English",
+  },
+};
+const { info: personInformation } = person;
+console.log(personInformation.country);
+//Korea
+```
+
+# 프로퍼티가 객체에 존재하는 지 확인
+
+`in` 키워드를 사용하면 쉽게 확인 가능하다.
+
+```javascript
+const person = {
+  name: "Kim",
+  age: 12,
+  info: {
+    country: "Korea",
+    language: "English",
+  },
+};
+if ("name" in person) {
+  console.log("있다");
+  //있다
+}
+```
+
+# this, 그리고 bind()와 call()
+
+함수에서 this는 해당 함수를 실행시킨 주체를 뜻한다. 따라서 만약 메소드를 실행시키고, 해당 메소드 안에 this키워드를 사용한다면, this 해당 메소드를 저장하고 있는 객체를 가르키는 것이다.
+
+기본적으로 다음과 같이 사용할 수 있다.
+
+```javascript
+const movie = {
+  movieTitle: movieTitle,
+  movieId: movieId,
+  movieInfromation: {
+    [movieDescription]: movieDescription,
+    [movieValue]: movieValue,
+  },
+  getFormattedTitle: function () {
+    return this.movieTitle.toUpperCase();
+  },
+};
+movieLi.textContent = movie.getFormattedTitle();
+//this가 movie가 된다.
+```
+
+그러나 만약 this를 가지고 있는 메소드를 점 표기법 없이 실행한다면 this는 js가 strict모드가 아닌 경우 window객체를 참조하고, strict모드라면 아무것도 참조하지 않는다. 이때 불가피하게 점 표기법을 사용하면 안되는 경우 `bind()`를 통해 해결할 수 있다.
+
+bind()는 기본적으로 함수의 인자로 전달하는 함수에 미리 인자를 전달하는 용도로 사용하는데, 메소드의 this를 직접 지정해주는 역할도 수행한다.
+
+```javascript
+const movie = {
+  movieTitle: movieTitle,
+  movieId: movieId,
+  movieInfromation: {
+    [movieDescription]: movieDescription,
+    [movieValue]: movieValue,
+  },
+  getFormattedTitle: function () {
+    return this.movieTitle.toUpperCase();
+  },
+};
+let { getFormattedTitle } = movie;
+//객체 구조 분해 할당
+getFormattedTitle = getFormattedTitle.bind(movie);
+//this가 movie를 참조하도록 함
+movieLi.textContent = getFormattedTitle();
+```
+
+하지만 bind()를 사용하면 리턴값이 함수이므로 위와 같이 변수를 재선언해야한다. 따라서 this가 가르키는 참조값을 등록한 동시에 함수를 실행시키기 위해서는 `call()`을 이용해야 한다.
+
+```javascript
+const movie = {
+  movieTitle: movieTitle,
+  movieId: movieId,
+  movieInfromation: {
+    [movieDescription]: movieDescription,
+    [movieValue]: movieValue,
+  },
+  getFormattedTitle: function () {
+    return this.movieTitle.toUpperCase();
+  },
+};
+const { getFormattedTitle } = movie;
+//this가 movie를 참조하도록 함
+movieLi.textContent = getFormattedTitle.call(movie);
+```
+
+## 이벤트 리스너에 의해 실행된 함수에서의 this
+
+는 어떤 객체를 참조할까? 결론부터 말하자면 이벤트 리스너가 설치되어있는 DOM 객체이다.
+
+```javascript
+const searchMovieHandler = function () {
+  console.log(this);
+  //<button id="search-btn">Search</button>
+};
+searchMovieButton.addEventListener("click", searchMovieHandler);
+```
+
+## 화살표 함수와 this
+
+화살표 함수에서는 this를 바인딩하지 않는다. 따라서 기존에 this가 바인딩 되어 있다면, 그것을 그대로 사용한다. 이것은 장점일 수도, 단점일 수도 있다. 다음과 같은 사례에서 화살표 함수는 this의 리바인딩을 막고 정확한 값을 출력하도록 유도한다.
+
+```javascript
+const team = {
+  teamName: "Bird",
+  people: ["KIM", "MIN"],
+  getMembers() {
+    //일단 메소드는 화살표 함수가 아니다. 따라서 this를 바인딩한다.
+    this.people.forEach((p) => {
+      //forEach의 콜백함수는 화살표함수이다. 따라서 this를 리바인딩
+      //하지 않는다
+      console.log(p + "-" + this.teamName);
+    });
+  },
+};
+
+team.getMembers();
+//KIM-Bird
+//MIN-Bird
+```
+
+만약 forEach의 콜백함수를 일반함수로 선언했다면 this가 forEach를 실행시킨 브라우저 api, 즉 window객체를 참조하게 되므로 오류가 난다.
+
+# getter와 setter
+
+getter와 setter는 메소드 처럼 보이지만, 직접 이용하지 않고 해당 프로퍼티에 접근할 때 자동으로 실행된다. 다음과 같이 활용할 수 있다.
+
+```javascript
+const team = {
+  set teamName(teamNameValue) {
+    if (teamNameValue.trim() === "") {
+      this._teamName = "DEFAULT";
+      //_를 통해 메소드 내부의 teamName임을 지정한다.
+    } else {
+      this._teamName = teamNameValue;
+    }
+  },
+  get teamName() {
+    return this._teamName;
+  },
+  people: ["KIM", "MIN"],
+};
+
+team.teamName = "BLUE";
+//teamName 프로퍼티에 접근하면 자동으로 setter가 실행된다.
+console.log(team.teamName);
+//teamName 프로퍼티에 접근하면 자동으로 getter가 실행된다.
+```
