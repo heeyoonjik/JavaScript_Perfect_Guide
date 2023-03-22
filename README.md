@@ -2045,3 +2045,204 @@ team.teamName = "BLUE";
 console.log(team.teamName);
 //teamName 프로퍼티에 접근하면 자동으로 getter가 실행된다.
 ```
+
+# 클래스
+
+자바스크립트에서 클래스는 다른 객체지향언어(자바)와 비슷하게 객체를 만드는 틀로 인식할 수 있다. 생성자 함수에 인자를 전달함으로써 서로 다른 객체를 만든는 컨셉은 자바스크립에서도 유효하다. 클래스는 객체를 만드는 기계이다.
+
+```javascript
+class Product {
+  title = "DEFAULT";
+  imageUrl;
+  description;
+  price;
+
+  constructor(title, imageUrl, description, price) {
+    this.title = title;
+    this.imageUrl = imageUrl;
+    this.description = description;
+    this.price = price;
+  }
+}
+```
+
+클래스 내에서 정의한 변수를 필드라 한다. 그리고 이 필드는 객체가 생성되었을 때, 객체에서 프로퍼티로서 역할을 한다. 필드가 곧 프로퍼티인 것이다.
+
+근데 사실 필드를 위에서 자바처럼 미리 정의할 필요는 없다. 자바스크립트는 동적이기 때문에 객체 생성시 기존에 없던 필드에 접근하고자 하면 필드를 생성해주기 때문이다.
+
+다음과 같이 정의한 클래스에 따라 객체를 생성한다.
+
+```javascript
+  products: [
+    new Product(
+      "A Pillow",
+      "https://image.hmall.com/static/1/6/66/32/2132666191_0.jpg?RS=600x600&AR=0",
+      19.99,
+      "A Soft Pillow"
+    ),
+    new Product(
+      "A Carpet",
+      "https://image.hmall.com/static/1/6/66/32/2132666191_0.jpg?RS=600x600&AR=0",
+      89.9,
+      "A Carpet Which you might like"
+    ),
+  ],
+```
+
+`new` 키워드를 활용해 생성자 함수에 인자를 전달하여 개별 객체를 만든다.
+
+# 자바스크립트 객체 지향
+
+클래스를 정의해서 그 클래스로부터 만든 객체를 활용하겠다는 자바스크립트의 객체 지향 핵심은 분업화이다. 하나의 함수나 코드뭉치가 여러 일을 하지 않도록, 여러 클래스로 쪼개는 것이다. 어떤 저장된 카드를 보여주는 웹 사이트를 만들 때, 그 카드의 정보의 형식을 클래스로 만들고, 그런 여러 카드들을 저장하고 DOM에 보여지게 하는 함수와 배열을 가진 클래스로 만들고, 그 각각의 카드를 DOM 객체로 만드는 함수를 갖고 있는 클래스를 만든다. 모든 것을 클래스 안에 넣고, 여러 클래스로 쪼개어서 분업화한다.
+
+```javascript
+class Product {
+  // title = "DEFAULT";
+  // imageUrl;
+  // description;
+  // price;
+
+  constructor(title, imageUrl, description, price) {
+    this.title = title;
+    this.imageUrl = imageUrl;
+    this.description = description;
+    this.price = price;
+  }
+}
+
+class ProductDOM {
+  constructor(product) {
+    this.product = product;
+  }
+  render() {
+    const prodEl = document.createElement("li");
+    prodEl.className = "product-item";
+    prodEl.innerHTML = `
+        <div>
+          <img src="${this.product.imageUrl} alt=${this.product.title}" >
+          <div class="product-item__content">
+            <h2>${this.product.title} </h2>
+            <h3>\$${this.product.price}</h3>
+            <p>${this.product.description}</p>
+            <button>Add to Cart</button>
+          </div>
+        </div>
+      `;
+    return prodEl;
+  }
+}
+
+class ProductList {
+  products = [
+    new Product(
+      "A Pillow",
+      "https://image.hmall.com/static/1/6/66/32/2132666191_0.jpg?RS=600x600&AR=0",
+      19.99,
+      "A Soft Pillow"
+    ),
+    new Product(
+      "A Carpet",
+      "https://image.hmall.com/static/1/6/66/32/2132666191_0.jpg?RS=600x600&AR=0",
+      89.9,
+      "A Carpet Which you might like"
+    ),
+  ];
+  constructor() {}
+
+  render() {
+    const renderHook = document.getElementById("app");
+    const prodList = document.createElement("ul");
+    prodList.className = "product-list";
+    for (const prod of this.products) {
+      const productDOM = new ProductDOM(prod);
+      const productDOMItem = productDOM.render();
+      prodList.append(productDOMItem);
+    }
+    renderHook.append(prodList);
+  }
+}
+
+const productList = new ProductList();
+
+productList.render();
+```
+
+# 정적 프로퍼티,메소드
+
+클래스에서 정의한 프로퍼티나 메소드를 사용하기 위해서는 원래라면 객체를 만들고 그 객체에 접근해야 하지만, `static` 키워드를 통해 선언된 정적 프로퍼티 및 메소드는 클래스에서 접근 가능하므로 객체를 만들 필요가 없다.
+
+```javascript
+class App {
+  static init() {
+    const shop = new Shop();
+    shop.render();
+    this.cart = shop.cart;
+  }
+
+  static addProductToCart(product) {
+    this.cart.addProduct(product);
+  }
+}
+
+App.init();
+```
+
+위와 같이 서로 다른 클래스들의 객체를 모아 둔 핵심 클래스의 init 함수도 static으로 선언해 결국 클래스 밖에 존재하는 코드는 단 한 줄만 존재하도록 가능하다.
+
+# getter와 setter 사용가능
+
+함수에서 배운 getter와 setter를 클래스에서도 사용 가능하다.
+변수에 변하게 생겼을 때 setter가 실행되며, 변수를 호출할 때 getter함수가 실행된다.
+
+```javascript
+  set cartItems(value) {
+    this.items = value;
+    this.totalOutput.innerHTML = `<h2>Total: \$${this.totalAmount.toFixed(2)}`;
+  }
+
+  get totalAmount() {
+    const sum = this.items.reduce((preValue, curItem) => {
+      return preValue + curItem.price;
+    }, 0);
+    return sum;
+  }
+
+```
+
+# 상속
+
+자바스크립트에서도 객체지향의 핵심인 상속이 지원된다. `extends` 키워드를 이용해 상속을 명시하면 this로도 부모 클래스의 프로퍼티와 메소드에 접근 가능하다.
+
+만약 자식 클래스의 생성자를 정의하지 않으면 부모 클래스의 생성자만이 호출한다. 자식 클래스의 생성자에서 부모 클래스의 생성자를 호출하고 싶다면 `super()` 키워드를 사용하면 된다.
+
+메소드 오버라이딩도 당연히 지원된다. 따라서 부모 컴포넌트 메소드는 빈 껍데기로 두고, 자식 컴포넌트에서 해당 메소드를 구체화하는 방식이 사용된다.
+
+# 화살표 함수와 this
+
+만약 자바스크립트에서 DOM에 새로 추가한 버튼에 이벤트 리스너를 추가하여 이벤트 핸들러를 실행하고자 할 때, 해당 함수(핸들러)에서 this에 접근하면 이벤트 리스너가 설치되어있는 DOM 객체에 접근하게 된다. 이것은 this의 정의에 부합하는 사실이다. 왜냐하면 자바스크립트에서의 this는 선언이 아닌 호출의 대상을 찾는 키워드이며, "누가 나를 불렀는가?" 에 대한 답이라고 볼 수 있기 때문이다. 따라서 this를 바인딩하는 방법으로 화살표 함수를 이용하는 방법이다. 이벤트 핸들러를 바로 등록하지 말고, 화살표 함수 안에 실행하면 함수 본문을 수정하지 않아도 된다. 또는 이벤트 핸들러 자체를 화살표 함수로 정의하면 문제를 해결할 수 있다.
+
+# 기타
+
+## instanceOf
+
+A instanceOf B 라고 작성하게 되면 "A가 B클래스의 객체이니?"라고 물어보는 것이다. 맞다면 true 틀리면 false를 반환하는 연산자이다.
+
+## 객체 설명자
+
+`Object.getOwnPropertyDescriptors` 메소드에 객체를 인자로 전달하면 해당 객체에 대한 메타데이터를 확인할 수 있다.
+여기서 객체의 프로퍼티에 대해 확인할 수 있는 정보는 다음과 같다
+
+- configurable : 삭제할 수 있는
+- emurable : for-in loop에 나타날 수 있는
+- writable : 새로운 값을 할당할 수 있는
+
+그리고 이러한 메타데이터를 `Object.defineProperty`로 변경할 수 있다
+
+```javascript
+Object.defineProperty(person, 'name', {
+	configurable : true,
+    emurable : true,
+    value = this.name,
+    writable : false
+})
+```
